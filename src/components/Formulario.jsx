@@ -1,10 +1,30 @@
+import {useState, useEffect} from 'react';
 /**
  * Este componente retorna el contenido del formulario principal.
  * @returns 
  */
 function Formulario() {
+  const [petOwner,setPetOwner] = useState('');
+  const [petName,setPetName] = useState('');
+  const [email,setEmail] = useState('');
+  const [fecha,setFecha] = useState('');
+  const [sintomas,setSintomas] = useState('');
+
+  const [error,setError] = useState(false);
+
+  const handleSubmit= (e)=>{
+    e.preventDefault();
+    //validacion del formulario
+    if([petOwner,petName,email,fecha,sintomas].includes('')){
+      setError(true)
+      return;
+    }
+
+    setError(false)
+  }
+
   return (
-    <div className="md:w-1/2 lg:w-2/5">
+    <div className="md:w-1/2 lg:w-2/5 mx-5">
       <h2 className="font-black text-3xl text-center">Seguimiento Pasientes</h2>
       <p className="text-lg mt-5 text-center mb-10">
         Añade Pacientes y {''}
@@ -12,7 +32,14 @@ function Formulario() {
           Administralos
         </span>
       </p>
-      <form className="bg-white shadow-md raunded-lg py-10 px-5 mb-10">
+      <form className="bg-white shadow-md raunded-lg py-10 px-5 mb-10" onSubmit={handleSubmit}>
+        {error && 
+          <div className="bg-red-800 text-white text-center p-3 uppercase font-bold mb-3 raunded-md">
+            <p>
+              Todos los campos son obligatorios
+            </p>
+          </div>
+        }
         <div className="mb-5">
           <label htmlFor="petOwner" className="block text-gray-700 uppercase font-bold w-full">
             Nombre Propietario
@@ -24,6 +51,8 @@ function Formulario() {
             type="text" 
             placeholder="Nombre del Propietario" 
             className="border-2 w-full p-2 mt-2 placeholder-gray-400 raunded-md"
+            value={petOwner}
+            onChange={(e)=>setPetOwner(e.target.value)}
           />
         </div>
         <div className="mb-5">
@@ -36,6 +65,8 @@ function Formulario() {
             type="text" 
             placeholder="Nombre de la Mascota" 
             className="border-2 w-full p-2 mt-2 placeholder-gray-400 raunded-md"
+            value={petName}
+            onChange={(e)=>setPetName(e.target.value)}
           />
         </div>
         <div className="mb-5">
@@ -48,6 +79,8 @@ function Formulario() {
             type="email" 
             placeholder="Email Contacto Propietario" 
             className="border-2 w-full p-2 mt-2 placeholder-gray-400 raunded-md"
+            value={email}
+            onChange={(e)=>setEmail(e.target.value)}
           />
         </div>
         <div className="mb-5">
@@ -59,16 +92,27 @@ function Formulario() {
             id="alta"
             type="date" 
             className="border-2 w-full p-2 mt-2 placeholder-gray-400 raunded-md"
+            value={fecha}
+            onChange={(e)=>setFecha(e.target.value)}
           />
         </div>
         <div className="mb-5">
           <label htmlFor="sintomas" className="block text-gray-700 uppercase font-bold">
             Sintomas
           </label>
-          <textarea id="sintomas"  placeholder="Describe los Sintomas" className="border-2 w-full p-2 mt-2 placeholder-gray-400 raunded-md"/>
+
+          <textarea 
+            id="sintomas"  
+            placeholder="Describe los Sintomas" 
+            className="border-2 w-full p-2 mt-2 placeholder-gray-400 raunded-md"
+            value={sintomas}
+            onChange={(e)=>setSintomas(e.target.value)}/>
         </div>
 
-        <input type="submit" className="bg-indigo-600 w-full p-3 text-white uppercase font-bold hover:bg-indigo-700 cursor-pointer transition-all" value="Agregar Parciente" />
+        <input 
+          type="submit" 
+            className="bg-indigo-600 w-full p-3 text-white uppercase font-bold hover:bg-indigo-700 cursor-pointer transition-all" 
+            value="Agregar Parciente" />
       </form>
     </div>
   )
