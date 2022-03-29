@@ -5,7 +5,7 @@ import Error from './Error';
  * Este componente retorna el contenido del formulario principal.
  * @returns 
  */
-function Formulario({pasientes,setPasientes}) {
+function Formulario({pacientes,setPacientes, paciente,setPaciente}) {
   const [petOwner,setPetOwner] = useState('');
   const [petName,setPetName] = useState('');
   const [email,setEmail] = useState('');
@@ -13,6 +13,16 @@ function Formulario({pasientes,setPasientes}) {
   const [sintomas,setSintomas] = useState('');
 
   const [error,setError] = useState(false);
+
+  useEffect(() => {
+    if(Object.keys(paciente).length>0){
+      setPetOwner(paciente.petName);
+      setPetName(paciente.petOwner);
+      setEmail(paciente.email);
+      setFecha(paciente.fecha);
+      setSintomas(paciente.sintomas);
+    }
+  },[paciente])
 
   const generarId=()=>{
     const random =Math.random().toString(36).substring(2)
@@ -31,7 +41,6 @@ function Formulario({pasientes,setPasientes}) {
 
     //Objeto de paciente del formulario
     const objectPet={
-      id: generarId(),
       petOwner,
       petName,
       email,
@@ -39,8 +48,19 @@ function Formulario({pasientes,setPasientes}) {
       sintomas
     }
 
+    if (paciente.id){
+      objectPet.id=paciente.id;
+
+      const pasientesActualizados= pacientes.map( pacienteState => pacienteState.id === paciente.id ? objectPet: pacienteState)
+      setPacientes(pasientesActualizados)
+      setPaciente({})
+    } else{
+      //nuevo Registro
+      objectPet.id =  generarId();
+      setPacientes([...pacientes,objectPet]);
+    }
     //console.log(objectPet);
-    setPasientes([...pasientes,objectPet]);
+    
 
     //reiniciar campos
     setPetOwner('')
@@ -52,9 +72,9 @@ function Formulario({pasientes,setPasientes}) {
 
   return (
     <div className="md:w-1/2 lg:w-2/5 mx-5">
-      <h2 className="font-black text-3xl text-center">Seguimiento Pasientes</h2>
+      <h2 className="font-black text-3xl text-center">Seguimiento pacientes</h2>
       <p className="text-lg mt-5 text-center mb-10">
-        Añade Pacientes y {''}
+        Añade pacientes y {''}
         <span className="text-indigo-600 font-bold text-lg">
           Administralos
         </span>
@@ -135,7 +155,7 @@ function Formulario({pasientes,setPasientes}) {
         <input 
           type="submit" 
             className="bg-indigo-600 w-full p-3 text-white uppercase font-bold hover:bg-indigo-700 cursor-pointer transition-all" 
-            value="Agregar Parciente" />
+            value={paciente.id? 'Editar Paciente': 'Agregar Paciente'} />
       </form>
     </div>
   )

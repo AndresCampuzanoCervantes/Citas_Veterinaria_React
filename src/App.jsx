@@ -4,8 +4,13 @@ import Header from "./components/Header"
 import ListadoPacientes from "./components/ListadoPacientes"
 
 function App() {
-  const [pasientes,setPasientes] = useState([]);
- 
+  const [pacientes,setPacientes] = useState([]);
+  const [paciente,setPaciente]=useState({});
+
+  const eliminarPaciente=id=>{
+    const pacientesActualizado=pacientes.filter(paciente=>paciente.id !== id)
+    setPacientes(pacientesActualizado);
+  }
 
   return (
     <div className="container mx-auto mt-20">
@@ -14,11 +19,15 @@ function App() {
       />
       <div className="mt-12 md:flex">
         <Formulario
-          pasientes={pasientes}
-          setPasientes={setPasientes}
+          pacientes={pacientes}
+          setPacientes={setPacientes}
+          paciente={paciente}
+          setPaciente={setPaciente}
         />
         <ListadoPacientes
-          pacientes={pasientes}
+          pacientes={pacientes}
+          setPaciente={setPaciente}
+          eliminarPaciente={eliminarPaciente}
         />
       </div>
     </div>
